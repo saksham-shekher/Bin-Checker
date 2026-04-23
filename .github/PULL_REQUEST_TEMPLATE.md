@@ -1,38 +1,17 @@
 ## Description
 
-Brief description of changes.
+<!-- Briefly describe the change -->
 
-## Type of Change
+## Type of change
 
-- [ ] 📊 Data: New card scheme
-- [ ] 📊 Data: Update existing patterns
-- [ ] 📊 Data: Add/update BINs
-- [ ] 🐛 Bug fix
-- [ ] ✨ New feature
-- [ ] 📝 Documentation
-- [ ] 🔧 Code improvement
-
-## Data Source (for data changes)
-
-- Official docs: [URL]
-- Verification method: [How you tested]
-
-## Changes Made
-
-- 
-- 
-- 
-
-## Testing
-
-- [ ] `npm run build` passes
-- [ ] `npm run validate` passes
-- [ ] Tests pass (if applicable)
-- [ ] Validated with sample cards
+- [ ] BIN data update (new scheme or pattern fix)
+- [ ] API feature or bug fix
+- [ ] Build / tooling improvement
+- [ ] Documentation
 
 ## Checklist
 
-- [ ] Follows schema guidelines (`data/SCHEMA.md`)
-- [ ] Includes source documentation (for data changes)
-- [ ] Updated relevant documentation
-- [ ] No breaking changes (or discussed first)
+- [ ] `npm run build` succeeds
+- [ ] `npm --prefix libs/javascript test` passes
+- [ ] `npm run api:test` passes
+- [ ] Data changes include a source citation (URL or reference)

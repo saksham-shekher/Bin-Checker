@@ -1,49 +1,23 @@
 ---
-name: Bug Report
-about: Report incorrect BIN patterns or code issues
-title: '[BUG] '
+name: Bug report
+about: Report incorrect BIN detection or an API bug
+title: 'bug: '
 labels: bug
 assignees: ''
 ---
 
-## Description
+## Describe the bug
 
-A clear description of the bug.
+<!-- What went wrong? -->
 
-## Card Scheme Affected
+## To reproduce
 
-- [ ] Visa
-- [ ] Mastercard
-- [ ] Amex
-- [ ] Discover
-- [ ] Elo
-- [ ] Diners
-- [ ] Hipercard
-- [ ] Aura
-- [ ] Other: ___
+<!-- For BIN issues: which BIN and what was the expected vs actual brand?
+     For API issues: request method, path, body, and response received. -->
 
-## Current Behavior
+## Expected behavior
 
-What is happening?
-
-## Expected Behavior
-
-What should happen instead?
-
-## Sample BIN (if applicable)
-
-Provide the first 6 digits (BIN) that demonstrates the issue:
-
-```
-XXXXXX
-```
-
-## Environment (for code issues)
+## Environment
 
 - Node.js version:
 - OS:
-- Library version:
-
-## Additional Context
-
-Any other relevant information.

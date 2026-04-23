@@ -1,9 +1,0 @@
-# Generated data files (built by npm run build)
-data/
-
-# Elixir build artifacts
-_build/
-deps/
-*.ez
-*.beam
-erl_crash.dump
