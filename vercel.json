@@ -1,7 +1,6 @@
 {
   "version": 2,
   "installCommand": "npm install --ignore-scripts",
-  "buildCommand": "npm run build",
   "functions": {
     "api/index.js": {
       "memory": 128,
