@@ -105,6 +105,7 @@ PORT=8080 npm run api:start
 - `GET /health` → API status
 - `GET /brands` → list of supported brand names
 - `GET /brands/:scheme?detailed=true` → brand metadata
+- `GET /bin/:bin` or `POST /bin` → BIN info (brand, lengths, luhn, cvv)
 - `POST /support` → check if card is supported
 - `POST /luhn` → validate number with Luhn algorithm
 - `POST /check` → full card check (support, brand, Luhn, optional CVV)

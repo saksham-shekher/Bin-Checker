@@ -81,6 +81,34 @@ test('POST /check handles unsupported card number', async () => {
   });
 });
 
+test('GET /bin/:bin returns brand metadata for a valid BIN', async () => {
+  await withServer(async baseUrl => {
+    const response = await request(baseUrl, '/bin/401200');
+
+    assert.equal(response.status, 200);
+    assert.equal(response.body.valid, true);
+    assert.equal(response.body.supported, true);
+    assert.equal(response.body.brand, 'visa');
+    assert.equal(response.body.cardLengths.includes(16), true);
+    assert.equal(response.body.luhnRequired, true);
+    assert.equal(response.body.cvvLength, 3);
+  });
+});
+
+test('POST /bin rejects invalid bin length', async () => {
+  await withServer(async baseUrl => {
+    const response = await request(baseUrl, '/bin', {
+      method: 'POST',
+      body: JSON.stringify({ bin: '123' })
+    });
+
+    assert.equal(response.status, 200);
+    assert.equal(response.body.valid, false);
+    assert.equal(response.body.supported, false);
+    assert.equal(response.body.brand, null);
+  });
+});
+
 test('POST /support returns bad request when cardNumber is missing', async () => {
   await withServer(async baseUrl => {
     const response = await request(baseUrl, '/support', {

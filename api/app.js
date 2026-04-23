@@ -5,6 +5,13 @@ const checker = require('../libs/javascript');
 
 const JSON_CONTENT_TYPE = { 'Content-Type': 'application/json; charset=utf-8' };
 const MAX_REQUEST_BODY_SIZE = 1_000_000;
+const BIN_MIN_LENGTH = 6;
+const BIN_MAX_LENGTH = 8;
+
+const compiledBinMatchers = checker.brands.map(brand => ({
+  ...brand,
+  regexpBin: new RegExp(brand.regexpBin)
+}));
 
 function sendJson(res, statusCode, payload) {
   res.writeHead(statusCode, JSON_CONTENT_TYPE);
@@ -72,6 +79,76 @@ function readCardNumber(body) {
   return normalizeDigits(body && body.cardNumber);
 }
 
+function readBin(body, pathname) {
+  if (body && body.bin !== undefined) {
+    return normalizeDigits(body.bin);
+  }
+
+  if (pathname && pathname.startsWith('/bin/')) {
+    const binFromPath = decodeURIComponent(pathname.slice('/bin/'.length));
+    return normalizeDigits(binFromPath);
+  }
+
+  return null;
+}
+
+function pickPriorityBrand(candidates) {
+  if (!candidates.length) return null;
+  if (candidates.length === 1) return candidates[0];
+
+  const candidateNames = candidates.map(candidate => candidate.name);
+
+  for (const candidate of candidates) {
+    if (candidate.priorityOver.some(other => candidateNames.includes(other))) {
+      return candidate;
+    }
+  }
+
+  return candidates[0];
+}
+
+function getBinInfo(bin) {
+  const valid = /^\d+$/.test(bin) && bin.length >= BIN_MIN_LENGTH && bin.length <= BIN_MAX_LENGTH;
+  if (!valid) {
+    return {
+      bin,
+      valid: false,
+      supported: false,
+      brand: null,
+      cardLengths: [],
+      luhnRequired: null,
+      cvvLength: null
+    };
+  }
+
+  const matches = compiledBinMatchers.filter(brand => brand.regexpBin.test(bin));
+  const selected = pickPriorityBrand(matches);
+
+  if (!selected) {
+    return {
+      bin,
+      valid: true,
+      supported: false,
+      brand: null,
+      cardLengths: [],
+      luhnRequired: null,
+      cvvLength: null
+    };
+  }
+
+  const detailed = checker.getBrandInfoDetailed(selected.name);
+
+  return {
+    bin,
+    valid: true,
+    supported: true,
+    brand: selected.name,
+    cardLengths: detailed?.number?.lengths || [],
+    luhnRequired: detailed?.number?.luhn ?? null,
+    cvvLength: detailed?.cvv?.length ?? null
+  };
+}
+
 function createHandler() {
   return async function handler(req, res) {
     const method = req.method || 'GET';
@@ -85,6 +162,26 @@ function createHandler() {
 
     if (method === 'GET' && pathname === '/brands') {
       sendJson(res, 200, { brands: checker.listBrands() });
+      return;
+    }
+
+    if (
+      (method === 'POST' && pathname === '/bin') ||
+      (method === 'GET' && pathname.startsWith('/bin/'))
+    ) {
+      try {
+        const body = method === 'POST' ? await readJsonBody(req) : null;
+        const bin = readBin(body, pathname);
+
+        if (!bin) {
+          sendJson(res, 400, { error: 'bin is required' });
+          return;
+        }
+
+        sendJson(res, 200, getBinInfo(bin));
+      } catch (error) {
+        sendJson(res, 400, { error: error.message });
+      }
       return;
     }
 
