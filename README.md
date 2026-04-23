@@ -101,7 +101,8 @@ PORT=8080 npm run api:start
 bin-checker/
 ├── api/
 │   ├── app.js          # HTTP handler (no framework, zero deps)
-│   ├── server.js       # Server entry point
+│   ├── index.js        # Vercel serverless entry point
+│   ├── server.js       # Local HTTP server entry point
 │   └── app.test.js     # Integration tests (node:test)
 ├── data/
 │   ├── sources/        # Editable BIN source files (JSON)
@@ -113,9 +114,50 @@ bin-checker/
 │   ├── build.js        # Compiles sources → JS data files
 │   ├── validate.js     # Validates source files
 │   └── create-card.js  # Interactive CLI to add a new card scheme
+├── vercel.json         # Vercel deployment configuration
+├── .vercelignore       # Files excluded from Vercel deployment
 ├── package.json
 └── README.md
 ```
+
+## Deploy to Vercel
+
+The API is ready to deploy on [Vercel](https://vercel.com) as a serverless function with zero-config.
+
+### One-click deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/saksham-shekher/Bin-Checker)
+
+### CLI deploy
+
+```bash
+npm i -g vercel
+vercel
+```
+
+Vercel automatically:
+1. Runs `npm install --ignore-scripts` (installs build deps)
+2. Runs `npm run build` (compiles BIN source data → `libs/javascript/data/`)
+3. Deploys `api/index.js` as a single serverless function
+4. Routes all requests (`/*`) to that function
+
+### Environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| _(none required)_ | — | All configuration is self-contained |
+
+> **Note:** `PORT` is ignored on Vercel — the platform assigns the port automatically.
+
+### Vercel configuration summary (`vercel.json`)
+
+| Setting | Value |
+|---------|-------|
+| Function entry | `api/index.js` |
+| Memory | 128 MB |
+| Max duration | 10 s |
+| Build command | `npm run build` |
+| Install command | `npm install --ignore-scripts` |
 
 ## Development
 
