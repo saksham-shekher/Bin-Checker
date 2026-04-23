@@ -1,27 +1,13 @@
 ---
-name: Feature Request
-about: Suggest a new feature or improvement
-title: '[FEATURE] '
+name: Feature request
+about: Suggest a new endpoint, BIN data, or improvement
+title: 'feat: '
 labels: enhancement
 assignees: ''
 ---
 
-## Description
+## What problem does this solve?
 
-A clear description of the feature you'd like.
+## Proposed solution
 
-## Use Case
-
-Why is this feature needed? What problem does it solve?
-
-## Proposed Solution
-
-How would you implement this?
-
-## Alternatives Considered
-
-Any alternative solutions you've considered.
-
-## Additional Context
-
-Any other relevant information.
+## Additional context

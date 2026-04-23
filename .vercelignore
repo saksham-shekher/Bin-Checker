@@ -1,0 +1,17 @@
+# Local-only server entry (not needed on Vercel)
+api/server.js
+
+# Tests
+api/app.test.js
+
+# Build tooling (not needed at runtime)
+scripts/
+
+# Raw card source data (only needed during build)
+data/sources/
+
+# CI / repo meta
+.github/
+
+# Dev dependency lockfiles inside libs
+libs/javascript/node_modules/

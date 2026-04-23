@@ -11,23 +11,7 @@ const {
   generateJavaScript,
   generateJavaScriptDetailed,
   generateTypeScriptDeclaration,
-  generateTypeScriptDeclarationDetailed,
-  generatePython,
-  generatePythonDetailed,
-  generateRuby,
-  generateRubyDetailed,
-  generateElixir,
-  generateElixirDetailed,
-  generateCSharp,
-  generateCSharpDetailed,
-  generateJava,
-  generateJavaDetailed,
-  generateRust,
-  generateRustDetailed,
-  generateGo,
-  generateGoDetailed,
-  generatePhp,
-  generatePhpDetailed
+  generateTypeScriptDeclarationDetailed
 } = require('./lib/generators/index');
 
 /**
@@ -40,15 +24,11 @@ function ensureOutputDir() {
 }
 
 /**
- * Generate native data files for all libraries
+ * Generate JavaScript data files for the API library
  */
 function generateNativeFiles(simplified, detailed) {
-  console.log('\n📦 Generating native data files...');
-  
-  // JSON data for detailed brands (to be copied to each library)
-  const detailedJson = JSON.stringify(detailed, null, 2);
-  
-  // JavaScript (simplified + detailed)
+  console.log('\n📦 Generating JavaScript data files...');
+
   const jsDataDir = path.join(LIBS_DIR, 'javascript', 'data');
   fs.mkdirSync(jsDataDir, { recursive: true });
   fs.writeFileSync(path.join(jsDataDir, 'brands.js'), generateJavaScript(simplified));
@@ -57,82 +37,6 @@ function generateNativeFiles(simplified, detailed) {
   fs.writeFileSync(path.join(jsDataDir, 'brands-detailed.d.ts'), generateTypeScriptDeclarationDetailed());
   console.log('  ✓ Generated libs/javascript/data/brands.js');
   console.log('  ✓ Generated libs/javascript/data/brands-detailed.js');
-  
-  // Python (simplified + detailed + JSON)
-  const pyDataDir = path.join(LIBS_DIR, 'python', 'creditcard_identifier');
-  fs.mkdirSync(pyDataDir, { recursive: true });
-  fs.writeFileSync(path.join(pyDataDir, 'brands.py'), generatePython(simplified));
-  fs.writeFileSync(path.join(pyDataDir, 'brands_detailed.py'), generatePythonDetailed(detailed));
-  fs.writeFileSync(path.join(pyDataDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/python/creditcard_identifier/brands.py');
-  console.log('  ✓ Generated libs/python/creditcard_identifier/brands_detailed.py + JSON');
-  
-  // Ruby (simplified + detailed + JSON)
-  const rbLibDir = path.join(LIBS_DIR, 'ruby', 'lib', 'creditcard_identifier');
-  fs.mkdirSync(rbLibDir, { recursive: true });
-  fs.writeFileSync(path.join(rbLibDir, 'brands.rb'), generateRuby(simplified));
-  fs.writeFileSync(path.join(rbLibDir, 'brands_detailed.rb'), generateRubyDetailed(detailed));
-  fs.writeFileSync(path.join(rbLibDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/ruby/lib/creditcard_identifier/brands.rb');
-  console.log('  ✓ Generated libs/ruby/lib/creditcard_identifier/brands_detailed.rb + JSON');
-  
-  // Elixir (simplified + detailed + JSON in priv)
-  const exLibDir = path.join(LIBS_DIR, 'elixir', 'lib', 'creditcard_identifier');
-  const exPrivDir = path.join(LIBS_DIR, 'elixir', 'priv');
-  fs.mkdirSync(exLibDir, { recursive: true });
-  fs.mkdirSync(exPrivDir, { recursive: true });
-  fs.writeFileSync(path.join(exLibDir, 'data.ex'), generateElixir(simplified));
-  fs.writeFileSync(path.join(exLibDir, 'data_detailed.ex'), generateElixirDetailed(detailed));
-  fs.writeFileSync(path.join(exPrivDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/elixir/lib/creditcard_identifier/data.ex');
-  console.log('  ✓ Generated libs/elixir/lib/creditcard_identifier/data_detailed.ex + JSON');
-  
-  // C# (simplified + detailed + JSON as embedded resource)
-  const csDir = path.join(LIBS_DIR, 'dotnet', 'CreditCardIdentifier');
-  fs.mkdirSync(csDir, { recursive: true });
-  fs.writeFileSync(path.join(csDir, 'BrandData.cs'), generateCSharp(simplified));
-  fs.writeFileSync(path.join(csDir, 'BrandDataDetailed.cs'), generateCSharpDetailed(detailed));
-  fs.writeFileSync(path.join(csDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/dotnet/CreditCardIdentifier/BrandData.cs');
-  console.log('  ✓ Generated libs/dotnet/CreditCardIdentifier/BrandDataDetailed.cs + JSON');
-  
-  // Java (simplified + detailed + JSON in resources)
-  const javaDir = path.join(LIBS_DIR, 'java', 'src', 'main', 'java', 'br', 'com', 's2n', 'creditcard', 'identifier');
-  const javaResourcesDir = path.join(LIBS_DIR, 'java', 'src', 'main', 'resources');
-  fs.mkdirSync(javaDir, { recursive: true });
-  fs.mkdirSync(javaResourcesDir, { recursive: true });
-  fs.writeFileSync(path.join(javaDir, 'BrandData.java'), generateJava(simplified));
-  fs.writeFileSync(path.join(javaDir, 'BrandDataDetailed.java'), generateJavaDetailed(detailed));
-  fs.writeFileSync(path.join(javaResourcesDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/java/src/main/java/br/com/s2n/creditcard/identifier/BrandData.java');
-  console.log('  ✓ Generated libs/java/src/main/java/br/com/s2n/creditcard/identifier/BrandDataDetailed.java + JSON');
-  
-  // Rust (simplified + detailed + JSON in src)
-  const rustDir = path.join(LIBS_DIR, 'rust', 'src');
-  fs.mkdirSync(rustDir, { recursive: true });
-  fs.writeFileSync(path.join(rustDir, 'brands.rs'), generateRust(simplified));
-  fs.writeFileSync(path.join(rustDir, 'brands_detailed.rs'), generateRustDetailed(detailed));
-  fs.writeFileSync(path.join(rustDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/rust/src/brands.rs');
-  console.log('  ✓ Generated libs/rust/src/brands_detailed.rs + JSON');
-  
-  // Go (simplified + detailed + JSON embedded)
-  const goDir = path.join(LIBS_DIR, 'go');
-  fs.mkdirSync(goDir, { recursive: true });
-  fs.writeFileSync(path.join(goDir, 'brands.go'), generateGo(simplified));
-  fs.writeFileSync(path.join(goDir, 'brands_detailed.go'), generateGoDetailed(detailed));
-  fs.writeFileSync(path.join(goDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/go/brands.go');
-  console.log('  ✓ Generated libs/go/brands_detailed.go + JSON');
-  
-  // PHP (simplified + detailed + JSON)
-  const phpDir = path.join(LIBS_DIR, 'php', 'src');
-  fs.mkdirSync(phpDir, { recursive: true });
-  fs.writeFileSync(path.join(phpDir, 'BrandData.php'), generatePhp(simplified));
-  fs.writeFileSync(path.join(phpDir, 'BrandDataDetailed.php'), generatePhpDetailed(detailed));
-  fs.writeFileSync(path.join(phpDir, 'cards-detailed.json'), detailedJson);
-  console.log('  ✓ Generated libs/php/src/BrandData.php');
-  console.log('  ✓ Generated libs/php/src/BrandDataDetailed.php + JSON');
 }
 
 /**
