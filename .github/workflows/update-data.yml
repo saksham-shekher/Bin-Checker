@@ -55,8 +55,8 @@ jobs:
       # ── Commit & push any changes in compiled outputs ─────────────────────
       - name: Commit updated compiled outputs
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name  "saksham-shekher"
+          git config user.email "saksham-shekher@users.noreply.github.com"
 
           # Stage only the files that the build process produces/updates.
           git add \
