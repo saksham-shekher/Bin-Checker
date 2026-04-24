@@ -26,10 +26,8 @@
     "bin",
     "identifier",
     "validation",
-    "bin",
     "luhn",
     "data",
-    "tzdata",
     "credit-card-data"
   ],
   "author": "Renato Viço",
@@ -40,6 +38,10 @@
   "homepage": "https://github.com/renatovico/bin-cc#readme",
   "devDependencies": {
     "chai": "^5.1.2",
-    "mocha": "^11.0.1"
+    "mocha": "^11.7.5"
+  },
+  "overrides": {
+    "diff": "^9.0.0",
+    "serialize-javascript": "^7.0.5"
   }
 }

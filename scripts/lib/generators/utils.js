@@ -1,79 +1,5 @@
 'use strict';
 
-/**
- * Common utilities for code generators
- * 
- * Provides language-specific value conversion and common data extraction helpers.
- */
-
-// ============================================================================
-// LANGUAGE CONFIGURATION - Centralized syntax definitions
-// ============================================================================
-
-const LANG_CONFIG = {
-  python: {
-    null: 'None',
-    true: 'True',
-    false: 'False',
-    string: (s) => `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`,
-    rawString: (s) => s.includes('\\') ? `r"${s}"` : `"${s.replace(/"/g, '\\"')}"`,
-    array: (items) => `[${items.join(', ')}]`,
-    object: (entries) => `{${entries.map(([k, v]) => `"${k}": ${v}`).join(', ')}}`,
-  },
-  ruby: {
-    null: 'nil',
-    true: 'true',
-    false: 'false',
-    string: (s) => `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`,
-    array: (items) => `[${items.join(', ')}]`,
-    object: (entries) => `{ ${entries.map(([k, v]) => `"${k}" => ${v}`).join(', ')} }`,
-    regex: (pattern) => `/${pattern.replace(/^\^/, '\\A').replace(/\$$/, '\\z')}/`,
-  },
-  elixir: {
-    null: 'nil',
-    true: 'true',
-    false: 'false',
-    string: (s) => `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`,
-    array: (items) => `[${items.join(', ')}]`,
-    object: (entries) => `%{${entries.map(([k, v]) => `${k}: ${v}`).join(', ')}}`,
-    stringKeyObject: (entries) => `%{${entries.map(([k, v]) => `"${k}" => ${v}`).join(', ')}}`,
-    regex: (pattern) => `~r/${pattern.replace(/\//g, '\\/')}/`,
-  },
-  csharp: {
-    null: 'null',
-    true: 'true',
-    false: 'false',
-    string: (s) => `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`,
-    verbatimString: (s) => `@"${s.replace(/"/g, '""')}"`,
-    array: (items) => items.length > 0 ? `new object[] { ${items.join(', ')} }` : 'Array.Empty<object>()',
-    object: (entries) => `new Dictionary<string, object> { ${entries.map(([k, v]) => `{ "${k}", ${v} }`).join(', ')} }`,
-    intArray: (items) => items.length > 0 ? `new int[] { ${items.join(', ')} }` : 'Array.Empty<int>()',
-    stringArray: (items) => items.length > 0 ? `new string[] { ${items.join(', ')} }` : 'Array.Empty<string>()',
-  },
-};
-
-/**
- * Convert a JavaScript value to a language-specific literal
- * @param {*} val - Value to convert
- * @param {string} lang - Target language ('python', 'ruby', 'elixir', 'csharp')
- * @returns {string} Native literal for the language
- */
-function toNativeValue(val, lang) {
-  const config = LANG_CONFIG[lang];
-  
-  if (val === null || val === undefined) return config.null;
-  if (val === true) return config.true;
-  if (val === false) return config.false;
-  if (typeof val === 'number') return String(val);
-  if (typeof val === 'string') return config.string(val);
-  if (Array.isArray(val)) return config.array(val.map(v => toNativeValue(v, lang)));
-  if (typeof val === 'object') {
-    const entries = Object.entries(val).map(([k, v]) => [k, toNativeValue(v, lang)]);
-    return config.object(entries);
-  }
-  return String(val);
-}
-
 // ============================================================================
 // DATA EXTRACTION HELPERS
 // ============================================================================
@@ -120,8 +46,6 @@ function fileHeader(commentPrefix = '//') {
 }
 
 module.exports = {
-  LANG_CONFIG,
-  toNativeValue,
   extractSimplifiedBrand,
   extractDetailedBrand,
   fileHeader,

@@ -35,3 +35,6 @@ libs/**/_build/
 libs/**/deps/
 libs/**/__pycache__/
 libs/**/*.egg-info/
+
+# Go module cache (not part of this project)
+root/

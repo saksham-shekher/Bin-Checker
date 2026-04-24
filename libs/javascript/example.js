@@ -66,9 +66,9 @@ console.log('Visa detailed info:');
 const visaDetailed = creditcard.getBrandInfoDetailed('visa');
 if (visaDetailed) {
   console.log('  Scheme:', visaDetailed.scheme);
-  console.log('  Issuer:', visaDetailed.issuerName);
+  console.log('  Brand:', visaDetailed.brand);
   console.log('  Type:', visaDetailed.type);
-  console.log('  Country:', visaDetailed.country);
+  console.log('  Countries:', visaDetailed.countries);
 }
 console.log();
 
@@ -77,7 +77,7 @@ console.log('Find brand with detailed info:');
 const brandDetailed = creditcard.findBrand('4012001037141112', true);
 if (brandDetailed) {
   console.log('  Scheme:', brandDetailed.scheme);
-  console.log('  Issuer:', brandDetailed.issuerName);
+  console.log('  Brand:', brandDetailed.brand);
   console.log('  Type:', brandDetailed.type);
   if (brandDetailed.matchedPattern) {
     console.log('  Matched pattern:', brandDetailed.matchedPattern.bin);
